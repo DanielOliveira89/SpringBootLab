@@ -10,12 +10,10 @@
 		<div class="container">
 			<div>
 				<h1>Task Details</h1>
-				<form:form method="post" modelAttribute="task">
-					Description: <form:input type="text" path="description" name="description" required="required"/>
-					<form:input type="hidden" path="status"/>
-					<form:input type="hidden" path="id"/>
+				<form method="post">
+					Description: <input type="text" name="description" required="required"/>
 					<input type="submit" class="btn btn-success"/>
-				</form:form>
+				</form>
 			</div>
 		</div>
 		<script src="webjars/bootstrap/5.1.3/js/bootstrap.min.js"></script>

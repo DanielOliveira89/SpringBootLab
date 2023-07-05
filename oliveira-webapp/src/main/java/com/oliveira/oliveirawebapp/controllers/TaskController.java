@@ -35,19 +35,17 @@ public class TaskController {
 	}
 	
 	@RequestMapping(value="add-task", method=RequestMethod.GET)
-	public String showNewTaskPage(ModelMap model)
+	public String showNewTaskPage()
 	{
-		String username = (String)model.get("username");
-		Task task = new Task(0, username, "", LocalDate.now().plusYears(1), TaskStatus.NOT_DONE);
-		model.put("task", task);
 		return "task";
 	}
 	 
 	@RequestMapping(value="add-task", method=RequestMethod.POST)
-	public String addNewTask(ModelMap model, Task task)
+	public String addNewTask(@RequestParam String description, ModelMap model)
 	{
+		
 		String username = (String)model.get("username");
-		taskService.addTask(username, task.getDescription(), LocalDate.now().plusYears(1), TaskStatus.NOT_DONE);
+		taskService.addTask(username, description, LocalDate.now().plusYears(1), TaskStatus.NOT_DONE);
 		return "redirect:get-tasks";
 	} 
 	 

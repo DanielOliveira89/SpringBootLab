@@ -28,7 +28,7 @@ public class TaskService {
 	
 	public void addTask(String username, String description, LocalDate targetDate, TaskStatus status) {
 		Task task = new Task(++tasksCount, username, description, targetDate, status);
-		tasks.add(task);
+		tasks.add(task); 
 		
 	}
 
