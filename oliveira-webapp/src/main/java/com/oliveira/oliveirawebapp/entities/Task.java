@@ -4,11 +4,15 @@ import java.time.LocalDate;
 
 import com.oliveira.oliveirawebapp.entities.enums.TaskStatus;
 
+import jakarta.validation.constraints.Size;
+
 public class Task {
 	
 	
 	private int id;
 	private String username;
+	
+	@Size(min=10, message="You must enter at least 10 characters")
 	private String description;
 	private LocalDate targetDate;
 	TaskStatus status;
