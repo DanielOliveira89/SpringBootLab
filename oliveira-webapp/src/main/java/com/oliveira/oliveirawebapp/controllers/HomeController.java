@@ -1,5 +1,7 @@
 package com.oliveira.oliveirawebapp.controllers;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,9 +15,13 @@ public class HomeController {
 
 	@RequestMapping(value="/", method = RequestMethod.GET)
 	public String gotoHome(ModelMap model) {
-		model.put("username", "Daniel");
+		model.put("username", getLoggedUsername());
 		return "home";
 	}
 	
-	
+	private String getLoggedUsername() {
+		Authentication auth =
+				SecurityContextHolder.getContext().getAuthentication();
+		return auth.getName();
+	}
 }

@@ -3,6 +3,8 @@ package com.oliveira.oliveirawebapp.controllers;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -31,16 +33,23 @@ public class TaskController {
 	@RequestMapping("get-tasks")
 	public String getTasks(ModelMap model)
 	{
-		List<Task> tasks = taskService.findByUsername("Daniel");
+		String username = getLoggedUsername(model);
+		List<Task> tasks = taskService.findByUsername(username);
 		model.put("tasks", tasks);
 		return "allTasks";
 		
+	}
+
+	private String getLoggedUsername(ModelMap model) {
+		Authentication auth =
+				SecurityContextHolder.getContext().getAuthentication();
+		return auth.getName();
 	}
 	
 	@RequestMapping(value="add-task", method=RequestMethod.GET)
 	public String showNewTaskPage(ModelMap model)
 	{
-		String username = (String)model.get("username");
+		String username = getLoggedUsername(model);
 		Task newTask = new Task(0, username, "", LocalDate.now().plusYears(1), TaskStatus.NOT_DONE);
 		model.put("newTask", newTask); 
 		return "task";
@@ -53,7 +62,7 @@ public class TaskController {
 			return "task";
 		}*/ 
 		
-		String username = (String)model.get("username");
+		String username = getLoggedUsername(model);
 		taskService.addTask(username, newTask.getDescription(), newTask.getTargetDate(), TaskStatus.NOT_DONE);
 		return "redirect:get-tasks";
 	}
@@ -76,7 +85,7 @@ public class TaskController {
 	@RequestMapping(value="update-task", method=RequestMethod.POST)
 	public String updateTask(ModelMap model, @Valid Task task, BindingResult result)
 	{
-		String username = (String)model.get("username");
+		String username = getLoggedUsername(model);
 		task.setUsername(username);
 		taskService.updateTask(task);
 		return "redirect:get-tasks";
