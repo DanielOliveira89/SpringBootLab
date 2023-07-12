@@ -4,16 +4,25 @@ import java.time.LocalDate;
 
 import com.oliveira.oliveirawebapp.entities.enums.TaskStatus;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Size;
 
+@Entity(name="tb_task")
 public class Task {
 	
 	
+	@Id
+	@GeneratedValue
 	private int id;
 	private String username;
 	
 	@Size(min=10, message="You must enter at least 10 characters")
 	private String description;
+	
+	@Column(name="target_date")
 	private LocalDate targetDate;
 	TaskStatus status;
 	

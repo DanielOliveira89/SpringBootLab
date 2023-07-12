@@ -2,10 +2,10 @@ package com.oliveira.oliveirawebapp.entities.enums;
 
 public enum TaskStatus {
 
-	NOT_DONE(1),
+	NOT_STARTED(0),
+	IN_PROGRESS(1),
 	DONE(2),
-	OPEN(3),
-	CANCELED(4);
+	CANCELED(3);
 
 	private int code;
 

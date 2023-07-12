@@ -19,9 +19,9 @@ public class TaskService {
 	
 	private static List<Task> tasks = new ArrayList<Task>();
 	static {
-		tasks.add(new Task(++tasksCount, "Daniel", "Learn SpringBoot", LocalDate.now().plusMonths(1), TaskStatus.NOT_DONE));
+		tasks.add(new Task(++tasksCount, "Daniel", "Learn SpringBoot", LocalDate.now().plusMonths(1), TaskStatus.NOT_STARTED));
 		tasks.add(new Task(++tasksCount, "Daniel", "Learn GCP", LocalDate.now().plusMonths(2), TaskStatus.DONE));
-		tasks.add(new Task(++tasksCount, "Maria", "Learn AWS", LocalDate.now().plusMonths(3), TaskStatus.NOT_DONE));
+		tasks.add(new Task(++tasksCount, "Maria", "Learn AWS", LocalDate.now().plusMonths(3), TaskStatus.NOT_STARTED));
 		tasks.add(new Task(++tasksCount, "Maria", "Learn Azure", LocalDate.now().plusMonths(3), TaskStatus.DONE));
 	}
 	

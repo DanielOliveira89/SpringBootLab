@@ -15,26 +15,30 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.oliveira.oliveirawebapp.entities.Task;
 import com.oliveira.oliveirawebapp.entities.enums.TaskStatus;
+import com.oliveira.oliveirawebapp.repositories.TaskRepository;
 import com.oliveira.oliveirawebapp.services.TaskService;
 
 import jakarta.validation.Valid;
 
-//@Controller
-//@SessionAttributes("username")
-public class TaskController {
+@Controller
+@SessionAttributes("username")
+public class TaskControllerJpa {
 
-	private TaskService taskService;
-	
-	public TaskController(TaskService taskService) {
+	public TaskControllerJpa(TaskService taskService, TaskRepository taskRepository) {
 		super();
 		this.taskService = taskService;
+		this.taskRepository = taskRepository;
 	}
+	
+	private TaskService taskService;
+	
+	private TaskRepository taskRepository;
 
 	@RequestMapping("get-tasks")
 	public String getTasks(ModelMap model)
 	{
 		String username = getLoggedUsername(model);
-		List<Task> tasks = taskService.findByUsername(username);
+		List<Task> tasks = taskRepository.findByUsername(username);
 		model.put("tasks", tasks);
 		return "allTasks";
 		
