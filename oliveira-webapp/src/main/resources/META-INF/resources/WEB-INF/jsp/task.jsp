@@ -21,6 +21,7 @@
 		</form:form>
 	</div>
 </div>
+<script src="webjars/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript">
 	$('#targetDate').datepicker({
 	    format: 'yyyy-mm-dd'

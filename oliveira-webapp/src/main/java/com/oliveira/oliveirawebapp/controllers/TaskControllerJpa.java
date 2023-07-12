@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.oliveira.oliveirawebapp.entities.Task;
 import com.oliveira.oliveirawebapp.entities.enums.TaskStatus;
 import com.oliveira.oliveirawebapp.repositories.TaskRepository;
-import com.oliveira.oliveirawebapp.services.TaskService;
 
 import jakarta.validation.Valid;
 
@@ -24,13 +23,11 @@ import jakarta.validation.Valid;
 @SessionAttributes("username")
 public class TaskControllerJpa {
 
-	public TaskControllerJpa(TaskService taskService, TaskRepository taskRepository) {
+	public TaskControllerJpa(TaskRepository taskRepository) {
 		super();
-		this.taskService = taskService;
 		this.taskRepository = taskRepository;
 	}
 	
-	private TaskService taskService;
 	
 	private TaskRepository taskRepository;
 
@@ -67,21 +64,25 @@ public class TaskControllerJpa {
 		}*/ 
 		
 		String username = getLoggedUsername(model);
-		taskService.addTask(username, newTask.getDescription(), newTask.getTargetDate(), TaskStatus.IN_PROGRESS);
+		newTask.setUsername(username);
+		taskRepository.save(newTask);
+		
+		//taskService.addTask(username, newTask.getDescription(), newTask.getTargetDate(), newTask.getStatus());
 		return "redirect:get-tasks";
 	}
 	
 	@RequestMapping("delete-task")
 	public String deleteTask(@RequestParam int id)
 	{
-		taskService.deleteById(id);
+		taskRepository.deleteById(id);
+		//taskService.deleteById(id);
 		return "redirect:get-tasks";		
 	}
 	
 	@RequestMapping(value="update-task", method=RequestMethod.GET)
 	public String showUpdateTaskPage(@RequestParam int id, ModelMap model)
 	{
-		Task task = taskService.findById(id);
+		Task task = taskRepository.findById(id).get();
 		model.addAttribute("newTask", task);
 		return "task";
 	}
@@ -91,7 +92,9 @@ public class TaskControllerJpa {
 	{
 		String username = getLoggedUsername(model);
 		task.setUsername(username);
-		taskService.updateTask(task);
+		
+		taskRepository.save(task);
+		//taskService.updateTask(task);
 		return "redirect:get-tasks";
 	}
 	 
