@@ -13,6 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.oliveira.rest.restfulapi.beans.User;
 import com.oliveira.rest.restfulapi.dao.UserDaoService;
+import com.oliveira.rest.restfulapi.exceptions.UserNotFoundException;
 
 @RestController
 public class UserResource {
@@ -31,8 +32,13 @@ public class UserResource {
 	
 	@GetMapping("/users/{id}")
 	public User getUserById(@PathVariable int id){
+		User user = userService.findOne(id);
 		
-		return userService.findOne(id);
+		if (user==null) 
+			throw new UserNotFoundException("nothing for this id, tho: "+id);
+		
+		return user;
+		
 	}
 	
 	@PostMapping("/users")
