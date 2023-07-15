@@ -1,4 +1,4 @@
-package com.oliveira.rest.restfulapi.controllers;
+package com.oliveira.rest.restfulapi.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

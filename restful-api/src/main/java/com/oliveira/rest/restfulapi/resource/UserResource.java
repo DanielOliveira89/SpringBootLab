@@ -1,4 +1,4 @@
-package com.oliveira.rest.restfulapi.resources;
+package com.oliveira.rest.restfulapi.resource;
 
 import java.net.URI;
 import java.util.List;
@@ -13,7 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.oliveira.rest.restfulapi.beans.User;
 import com.oliveira.rest.restfulapi.dao.UserDaoService;
-import com.oliveira.rest.restfulapi.exceptions.UserNotFoundException;
+import com.oliveira.rest.restfulapi.exception.UserNotFoundException;
 
 @RestController
 public class UserResource {
