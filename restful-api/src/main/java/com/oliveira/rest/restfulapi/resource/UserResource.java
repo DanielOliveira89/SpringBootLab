@@ -16,6 +16,8 @@ import com.oliveira.rest.restfulapi.beans.User;
 import com.oliveira.rest.restfulapi.dao.UserDaoService;
 import com.oliveira.rest.restfulapi.exception.UserNotFoundException;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class UserResource {
 	
@@ -43,7 +45,7 @@ public class UserResource {
 	}
 	
 	@PostMapping("/users")
-	public ResponseEntity<User> createUser(@RequestBody User user){
+	public ResponseEntity<User> createUser(@Valid @RequestBody User user){
 		User createdUser = userService.save(user);
 		
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest()

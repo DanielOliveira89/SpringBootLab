@@ -2,10 +2,17 @@ package com.oliveira.rest.restfulapi.beans;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
+
 public class User {
 	
 	private Integer id;
+	
+	@Size(min=2, message="Name min length must be 2")
 	private String name;
+	
+	@Past(message="Birth Date must be a past date")
 	private LocalDate birthDate;
 	
 	public User() {
