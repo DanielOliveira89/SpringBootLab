@@ -3,6 +3,9 @@ package com.oliveira.rest.restfulapi.resource;
 import java.net.URI;
 import java.util.List;
 
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,13 +37,18 @@ public class UserResource {
 	}
 	
 	@GetMapping("/users/{id}")
-	public User getUser(@PathVariable int id){
+	public EntityModel<User> getUser(@PathVariable int id){
 		User user = userService.findOne(id);
 		
 		if (user==null) 
 			throw new UserNotFoundException("nothing for this id, tho: "+id);
 		
-		return user;
+		EntityModel<User> entityModel = EntityModel.of(user);
+		
+		WebMvcLinkBuilder link = org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo(
+									org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn(this.getClass()).getAllUsers());
+		entityModel.add(link.withRel("all-users"));
+		return entityModel;
 		
 	}
 	
