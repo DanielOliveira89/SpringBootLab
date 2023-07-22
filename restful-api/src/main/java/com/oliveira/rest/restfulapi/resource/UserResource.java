@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.oliveira.rest.restfulapi.beans.User;
 import com.oliveira.rest.restfulapi.dao.UserDaoService;
 import com.oliveira.rest.restfulapi.exception.UserNotFoundException;
@@ -66,6 +69,19 @@ public class UserResource {
 	@DeleteMapping("/users/{id}")
 	public void deleteUser(@PathVariable int id){
 		userService.deleteById(id);
+		
+	}
+	
+	@GetMapping("/user-filtered/{id}")
+	public MappingJacksonValue getUserFiltered(@PathVariable int id){
+		User user = userService.findOne(id);
+		MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(user);
+		
+		SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("user_name", "country");
+		FilterProvider filters = new SimpleFilterProvider().addFilter("UserBeanFilter", filter);
+		mappingJacksonValue.setFilters(filters);
+
+		return mappingJacksonValue;
 		
 	}
 

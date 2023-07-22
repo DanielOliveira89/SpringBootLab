@@ -2,14 +2,15 @@ package com.oliveira.rest.restfulapi.beans;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
 
-@JsonIgnoreProperties({"address", "country"}) //Fields to be ignored at class level
+//@JsonIgnoreProperties({"address", "country"}) //Fields to be ignored at class level
+@JsonFilter("UserBeanFilter")
 public class User {
 	
 	private Integer id;
