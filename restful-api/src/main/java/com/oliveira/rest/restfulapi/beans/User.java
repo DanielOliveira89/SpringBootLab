@@ -2,25 +2,34 @@ package com.oliveira.rest.restfulapi.beans;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
 
 //@JsonIgnoreProperties({"address", "country"}) //Fields to be ignored at class level
-@JsonFilter("UserBeanFilter")
+//@JsonFilter("UserBeanFilter")
+@Entity (name="tb_user")
 public class User {
 	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
 	@Size(min=2, message="Name min length must be 2")
 	@JsonProperty("user_name")
+	@Column(name="user_name")
 	private String name;
 	
 	@Past(message="Birth Date must be a past date")
 	@JsonProperty("birth_date")
+	@Column(name="birth_date")
 	private LocalDate birthDate;
 	
 	private String gender;
