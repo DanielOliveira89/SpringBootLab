@@ -32,12 +32,12 @@ import jakarta.validation.Valid;
 public class UserJpaResource {
 	
 	private UserDaoService userService;
-	private UserRepository repository;
+	private UserRepository userRepo;
 	private PostRepository postRepo;
 	
-	public UserJpaResource(UserDaoService userService, UserRepository repository, PostRepository postRepo) {
+	public UserJpaResource(UserDaoService userService, UserRepository userRepo, PostRepository postRepo) {
 		this.userService = userService;
-		this.repository = repository;
+		this.userRepo = userRepo;
 		this.postRepo = postRepo;
 	}
 	
@@ -45,12 +45,12 @@ public class UserJpaResource {
 	@GetMapping("/user")
 	public List<User> getAllUsers(){
 		
-		return repository.findAll();
+		return userRepo.findAll();
 	}
 	
 	@GetMapping("/user/{id}")
 	public EntityModel<User> getUser(@PathVariable int id){
-		Optional<User> user = repository.findById(id);
+		Optional<User> user = userRepo.findById(id);
 		
 		if (user.isEmpty()) 
 			throw new UserNotFoundException("nothing for this id: "+id);
@@ -66,7 +66,7 @@ public class UserJpaResource {
 	
 	@PostMapping("/user")
 	public ResponseEntity<User> createUser(@Valid @RequestBody User user){
-		User createdUser = repository.save(user);
+		User createdUser = userRepo.save(user);
 		
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
 						.path("/{id}")
@@ -77,7 +77,7 @@ public class UserJpaResource {
 	
 	@DeleteMapping("/user/{id}")
 	public void deleteUser(@PathVariable int id){
-		repository.deleteById(id);
+		userRepo.deleteById(id);
 		
 	}
 	
@@ -96,7 +96,7 @@ public class UserJpaResource {
 	
 	@GetMapping("/user/{id}/posts")
 	public List<Post> getUserPosts(@PathVariable int id){
-		Optional<User> user = repository.findById(id);
+		Optional<User> user = userRepo.findById(id);
 		
 		if (user.isEmpty()) 
 			throw new UserNotFoundException("nothing for this id: "+id);
@@ -108,7 +108,7 @@ public class UserJpaResource {
 	
 	@PostMapping("/user/{id}/posts")
 	public ResponseEntity<Object> createPostForUser(@PathVariable int id, @Valid @RequestBody Post post){
-		Optional<User> user = repository.findById(id);
+		Optional<User> user = userRepo.findById(id);
 		
 		if (user.isEmpty()) 
 			throw new UserNotFoundException("no user id: "+id);
