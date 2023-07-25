@@ -1,7 +1,9 @@
 package com.oliveira.rest.restfulapi.beans;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
@@ -9,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
@@ -38,11 +41,15 @@ public class User {
 	private String address;
 	private String country;
 	
+	@OneToMany(mappedBy = "user")
+	@JsonIgnore
+	private List<Post> posts;
+	
 	public User() {
 		
 	}
 
-	public User(Integer id, String name, LocalDate birthDate, String gender, String address, String country) {
+	public User(Integer id, String name, LocalDate birthDate, String gender, String address, String country, List<Post> posts) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -50,6 +57,7 @@ public class User {
 		this.gender = gender;
 		this.address = address;
 		this.country = country;
+		this.posts = posts;
 	}
 
 	public Integer getId() {
@@ -98,6 +106,14 @@ public class User {
 
 	public void setCountry(String country) {
 		this.country = country;
+	}
+	
+	public List<Post> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
 	}
 
 	@Override

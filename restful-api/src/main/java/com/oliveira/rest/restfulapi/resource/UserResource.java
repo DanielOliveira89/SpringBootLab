@@ -33,13 +33,13 @@ public class UserResource {
 	}
 	
 	
-	@GetMapping("/users")
+	@GetMapping("/v1/users")
 	public List<User> getAllUsers(){
 		
 		return userService.findAll();
 	}
 	
-	@GetMapping("/users/{id}")
+	@GetMapping("/v1/users/{id}")
 	public EntityModel<User> getUser(@PathVariable int id){
 		User user = userService.findOne(id);
 		
@@ -55,7 +55,7 @@ public class UserResource {
 		
 	}
 	
-	@PostMapping("/users")
+	@PostMapping("/v1/users")
 	public ResponseEntity<User> createUser(@Valid @RequestBody User user){
 		User createdUser = userService.save(user);
 		
@@ -66,13 +66,13 @@ public class UserResource {
 		return ResponseEntity.created(location).build();
 	}
 	
-	@DeleteMapping("/users/{id}")
+	@DeleteMapping("/v1/users/{id}")
 	public void deleteUser(@PathVariable int id){
 		userService.deleteById(id);
 		
 	}
 	
-	@GetMapping("/user-filtered/{id}")
+	@GetMapping("/v1/user-filtered/{id}")
 	public MappingJacksonValue getUserFiltered(@PathVariable int id){
 		User user = userService.findOne(id);
 		MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(user);

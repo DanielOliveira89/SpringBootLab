@@ -19,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.oliveira.rest.restfulapi.beans.Post;
 import com.oliveira.rest.restfulapi.beans.User;
 import com.oliveira.rest.restfulapi.dao.UserDaoService;
 import com.oliveira.rest.restfulapi.exception.UserNotFoundException;
@@ -38,18 +39,18 @@ public class UserJpaResource {
 	}
 	
 	
-	@GetMapping("/jpa/users")
+	@GetMapping("/user")
 	public List<User> getAllUsers(){
 		
 		return repository.findAll();
 	}
 	
-	@GetMapping("/jpa/users/{id}")
+	@GetMapping("/user/{id}")
 	public EntityModel<User> getUser(@PathVariable int id){
 		Optional<User> user = repository.findById(id);
 		
 		if (user.isEmpty()) 
-			throw new UserNotFoundException("nothing for this id, tho: "+id);
+			throw new UserNotFoundException("nothing for this id: "+id);
 		
 		EntityModel<User> entityModel = EntityModel.of(user.get());
 		
@@ -60,7 +61,7 @@ public class UserJpaResource {
 		
 	}
 	
-	@PostMapping("/jpa/users")
+	@PostMapping("/user")
 	public ResponseEntity<User> createUser(@Valid @RequestBody User user){
 		User createdUser = repository.save(user);
 		
@@ -71,13 +72,13 @@ public class UserJpaResource {
 		return ResponseEntity.created(location).build();
 	}
 	
-	@DeleteMapping("/jpa/users/{id}")
+	@DeleteMapping("/user/{id}")
 	public void deleteUser(@PathVariable int id){
 		repository.deleteById(id);
 		
 	}
 	
-	@GetMapping("/jpa/user-filtered/{id}")
+	@GetMapping("/user-filtered/{id}")
 	public MappingJacksonValue getUserFiltered(@PathVariable int id){
 		User user = userService.findOne(id);
 		MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(user);
@@ -87,6 +88,18 @@ public class UserJpaResource {
 		mappingJacksonValue.setFilters(filters);
 
 		return mappingJacksonValue;
+		
+	}
+	
+	@GetMapping("/user/{id}/posts")
+	public List<Post> getUserPosts(@PathVariable int id){
+		Optional<User> user = repository.findById(id);
+		
+		if (user.isEmpty()) 
+			throw new UserNotFoundException("nothing for this id: "+id);
+		
+		return user.get().getPosts();
+		
 		
 	}
 
