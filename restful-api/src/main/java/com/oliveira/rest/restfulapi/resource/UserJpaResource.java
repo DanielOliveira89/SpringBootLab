@@ -23,6 +23,7 @@ import com.oliveira.rest.restfulapi.beans.Post;
 import com.oliveira.rest.restfulapi.beans.User;
 import com.oliveira.rest.restfulapi.dao.UserDaoService;
 import com.oliveira.rest.restfulapi.exception.UserNotFoundException;
+import com.oliveira.rest.restfulapi.repository.PostRepository;
 import com.oliveira.rest.restfulapi.repository.UserRepository;
 
 import jakarta.validation.Valid;
@@ -32,10 +33,12 @@ public class UserJpaResource {
 	
 	private UserDaoService userService;
 	private UserRepository repository;
+	private PostRepository postRepo;
 	
-	public UserJpaResource(UserDaoService userService, UserRepository repository) {
+	public UserJpaResource(UserDaoService userService, UserRepository repository, PostRepository postRepo) {
 		this.userService = userService;
 		this.repository = repository;
+		this.postRepo = postRepo;
 	}
 	
 	
@@ -99,6 +102,26 @@ public class UserJpaResource {
 			throw new UserNotFoundException("nothing for this id: "+id);
 		
 		return user.get().getPosts();
+		
+		
+	}
+	
+	@PostMapping("/user/{id}/posts")
+	public ResponseEntity<Object> createPostForUser(@PathVariable int id, @Valid @RequestBody Post post){
+		Optional<User> user = repository.findById(id);
+		
+		if (user.isEmpty()) 
+			throw new UserNotFoundException("no user id: "+id);
+		
+		post.setUser(user.get());
+		Post savedPost = postRepo.save(post);
+		
+		
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+				.path("/{id}")
+				.buildAndExpand(savedPost.getId())
+				.toUri();
+				return ResponseEntity.created(location).build();
 		
 		
 	}
